@@ -3,7 +3,7 @@ description: 23 May, 2025 - Xploit0x90
 icon: flag
 ---
 
-# Brooklyn Nine Nine CTF
+# Brooklyn Nine Nine CTF - 23.May
 
 <figure><img src="../.gitbook/assets/1,286 (3).png" alt=""><figcaption></figcaption></figure>
 

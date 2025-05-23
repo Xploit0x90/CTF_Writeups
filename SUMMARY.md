@@ -2,8 +2,8 @@
 
 * [Welcome to xploit0x90’s Writeups](README.md)
 
-## THM Writeups - May, 2025
+## THM Writeups - 2025
 
-* [Bounty Hacker](thm-writeups-may-2025/bounty-hacker-may-18-2025.md)
-* [Simple CTF](thm-writeups-may-2025/editor.md)
-* [Brooklyn Nine Nine CTF](thm-writeups-may-2025/editor-1.md)
+* [Bounty Hacker - 18.May](thm-writeups-2025/bounty-hacker-18.may.md)
+* [Simple CTF - 17.May](thm-writeups-2025/editor.md)
+* [Brooklyn Nine Nine CTF - 23.May](thm-writeups-2025/editor-1.md)
