@@ -3,7 +3,7 @@ description: May 18, 2025 - Xploit0x90
 icon: flag
 ---
 
-# Bounty Hacker  — May 18, 2025
+# Bounty Hacker
 
 <figure><img src="../.gitbook/assets/1,286 (1)qweqwe.png" alt=""><figcaption></figcaption></figure>
 
