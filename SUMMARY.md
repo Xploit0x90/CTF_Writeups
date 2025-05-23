@@ -4,5 +4,6 @@
 
 ## THM Writeups - May, 2025
 
-* [Bounty Hacker  — May 18, 2025](thm-writeups-may-2025/bounty-hacker-may-18-2025.md)
-* [Simple CTF - May 17, 2025](thm-writeups-may-2025/editor.md)
+* [Bounty Hacker](thm-writeups-may-2025/bounty-hacker.md)
+* [Simple CTF](thm-writeups-may-2025/editor.md)
+* [Brooklyn Nine Nine CTF](thm-writeups-may-2025/editor-1.md)
