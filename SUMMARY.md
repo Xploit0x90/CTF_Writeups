@@ -4,6 +4,7 @@
 
 ## THM Writeups - 2025
 
-* [Brooklyn Nine Nine CTF - 23.May](thm-writeups-2025/editor.md)
+* [CyberHeroes CTF - 25.May](thm-writeups-2025/editor.md)
+* [Brooklyn Nine Nine CTF - 23.May](thm-writeups-2025/editor-1.md)
 * [Bounty Hacker CTF - 18.May](thm-writeups-2025/bounty-hacker-18.may.md)
-* [Simple CTF - 17.May](thm-writeups-2025/editor-1.md)
+* [Simple CTF - 17.May](thm-writeups-2025/editor-2.md)
