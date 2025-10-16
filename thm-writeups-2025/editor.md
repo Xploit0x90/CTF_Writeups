@@ -61,7 +61,15 @@ Examining the page’s JavaScript revealed an `eval()` call that executes **user
 
 <figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
+The JavaScript is straightforward, without any obfuscation. But what’s it doing?
 
+1. **function search(path)** — Declaring a function called search that accepts one parameter, path. This function gets called by the second \<script> from earlier, _‘\<script>**search**(‘search-results’)\</script>’._ Here, _‘search-results’_ is being passed in as ‘_path’_.
+2. **var xhr = new XMLHttpRequest();** — It uses the _‘XMLHttpRequest’_ object to make a request to a specified _‘path’_ plus the current URL’s search parameters.
+3. **xhr.onreadystatechange = function() {…}** — Sets up a callback function to be executed whenever the _‘readyState’_ property of the XMLHttpRequest changes.
+4. **if (this.readyState == 4 && this.status == 200){…}** — Checks if the request has been completed (‘readyState == 4’) and if the response status is OK (‘status == 200’).
+5. **eval(‘var searchResultsObj = ‘ + this.responseText);** — Uses the ‘eval()’ function to interpret and execute the response text as JavaScript code. It effectively creates a variable named ‘searchResultsObj’ and assigns it the value of the response.
+6. **xhr.open(“GET”, path + window.location.search);** — Configures the XMLHttpRequest to make a GET request to the specified ‘path’ plus the current URL’s search parameters (‘window.location.search’).
+7. **xhr.send();** — Sends the HTTP request.
 
 ***
 
