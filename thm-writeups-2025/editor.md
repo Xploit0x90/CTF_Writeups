@@ -83,6 +83,8 @@ By closing the object with `}` and appending our payload, we can inject JavaScri
 
 Executing this payload triggers the alert, demonstrating a successful **reflected DOM XSS**, and completing the lab.
 
+<figure><img src="../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
+
 ***
 
 ### Conclusion
