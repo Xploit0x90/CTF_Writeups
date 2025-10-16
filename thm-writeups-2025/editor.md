@@ -1,126 +1,96 @@
 ---
-description: 25 May, 2025 - Xploit0x90
+description: 16 Oct , 2025 - Xploit0x90
 icon: flag
 ---
 
-# CyberHeroes CTF - 25.May
+# Reflected DOM XSS - 16.Oct
 
-<figure><img src="../.gitbook/assets/qweqweqwe.png" alt=""><figcaption></figcaption></figure>
-
-***
-
-* Difficulty : <mark style="color:green;">Easy</mark>
-* Link : [https://tryhackme.com/room/cyberheroes](https://tryhackme.com/room/cyberheroes)
-* Creator : [THMDan](https://tryhackme.com/p/THMDan) -  [cmnatic](https://tryhackme.com/p/cmnatic)  -  [tryhackme](https://tryhackme.com/p/tryhackme)
-
-## 🧠 CyberHeros — TryHackMe Walkthrough
-
-**Difficulty**: Easy\
-**IP Address**: `10.10.194.94`\
-**Focus Areas**: Web Enumeration, Source Code Analysis.\
-**Objective**: Gain access to a login panel using exposed credentials
+<figure><img src="../.gitbook/assets/4A6B75FE-1E4A-45DE-B2E1-E5B2DDB74596.webp" alt=""><figcaption></figcaption></figure>
 
 ***
 
-### 🚀 Deploy the Machine
-
-I deployed the machine and began with a standard enumeration process on the IP: `10.10.194.94`.
+## Reflected DOM XSS – PortSwigger Lab Write-Up
 
 ***
 
-### 🔎 Enumeration
+### Overview
 
-#### 🔹 Full Port Scan
-
-I ran a full TCP port scan to detect all open services:
-
-```bash
-nmap -p- -T4 10.10.194.94
-```
-
-**Result:**
-
-```
-22/tcp open  ssh
-80/tcp open  http
-```
-
-➤ The system is running an SSH service on port 22 and a web server on port 80.
+This lab demonstrates a **reflected DOM-based Cross-Site Scripting (XSS)** vulnerability. The goal was to identify how user input is reflected in the DOM and exploit it to execute arbitrary JavaScript.
 
 ***
 
-#### 🔹 Version and Script Scan
+### Step 1 – Discovering Reflection
 
-Next, I performed a detailed scan of the open ports:
+First, I entered a special test input to determine where the website reflects user data. Using the browser inspector, I observed that the input was reflected **inside an `<h1>` tag**:
 
-```bash
-nmap -p22,80 -T4 -A 10.10.194.94
+```html
+mosayhi
 ```
 
-**Output Summary:**
-
-```
-22/tcp open  ssh     OpenSSH 8.2p1 (Ubuntu)
-80/tcp open  http    Apache 2.4.48 (Ubuntu)
-  |_http-title: CyberHeros : Index
-  |_http-server-header: Apache/2.4.48 (Ubuntu)
-```
-
-➤ The site is running Apache on Ubuntu, and the homepage title is "CyberHeros".
+<figure><img src="../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
 ***
 
-### 🌐 HTTP Enumeration (Port 80)
+### Step 2 – Initial Payload Test
 
-#### 🔍 Source Code Analysis
+Next, I tested for basic XSS with the classic payload:
 
-I opened the website in a browser and used **View Page Source** to inspect the underlying HTML. I looked for:
-
-* HTML comments
-* Embedded credentials
-* Framework clues
-
-I discovered that the site uses a **BootstrapMade** template, which often indicates a **static site with no backend**, meaning all logic and data may be visible client-side.
-
-#### 🔑 Hidden Credentials
-
-In the HTML source, I found a hidden password string that looked like it was reversed:
-
-<div align="left"><figure><img src="../.gitbook/assets/qqqqq.png" alt=""><figcaption></figcaption></figure></div>
-
-```
-<!-- Password: 54321@terceSrepuS -->
+```html
+<script>alert('mosayhi')</script>
 ```
 
-Reversing it gives:
+The website **escaped the `<` and `>` characters**, preventing execution:
 
-```
-SuperSecret@12345
-```
-
-Also in the code, I found the username:
-
-```
-<!-- Username: h3ck3rBoi -->
-```
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 ***
 
-### 🔐 Login Bypass
+### Step 3 – Analyzing the Request
 
-I attempted to log in using the credentials found in the source:
+By intercepting the request in Burp Suite, it was clear that **our input was reflected in the HTTP response**:
 
-* **Username**: `h3ck3rBoi`
-* **Password**: `SuperSecret@12345`
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
-✅ **Success!** I was logged in and immediately presented with the first flag.
 
-***
-
-### 🎯 Flag Captured
-
-A flag was revealed upon successful login — proving the vulnerability and validating the source code leak.
 
 ***
 
-Want help writing this as a full GitBook chapter or Markdown export for TryHackMe documentation? Just ask!
+### Step 4 – Identifying the Vulnerable Context
+
+Examining the page’s JavaScript revealed an `eval()` call that executes **user-controlled data from `responseText()`**. Since `eval()` executes strings as JavaScript, this is a highly dangerous context:
+
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
+
+
+
+***
+
+### Step 5 – Bypassing Escaping
+
+When entering a double quote (`"`), it was escaped with a backslash (`\"`) to prevent breaking the string. By **adding a second backslash**, the first escape is neutralized, allowing us to close the string:
+
+<figure><img src="../.gitbook/assets/image (4) (2).png" alt=""><figcaption></figcaption></figure>
+
+***
+
+### Step 6 – Crafting the Exploit
+
+By closing the object with `}` and appending our payload, we can inject JavaScript and comment out the rest of the original code with `//`. This makes the payload executable:
+
+```javascript
+"}; alert('XSS'); //
+```
+
+Executing this payload triggers the alert, demonstrating a successful **reflected DOM XSS**, and completing the lab.
+
+***
+
+### Conclusion
+
+* The vulnerability exists because **user input is passed into `eval()` without proper sanitization**.
+* Standard escaping of `<` and `>` is insufficient in a JavaScript context.
+* DOM-based XSS requires **understanding how input flows into the page and which JavaScript constructs are used**, rather than just testing `<script>` tags.
+
+This lab is a classic example of why `eval()` with user-controlled input is dangerous and why context-aware sanitization or using safe APIs (like `textContent`) is critical.
+
+***
